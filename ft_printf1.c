@@ -1,100 +1,91 @@
 #include "ft_printf.h"
 
-int	ft_get_precision(const char ***str, va_list *ap)
+void    ft_get_precision(const char **str, va_list *ap, t_fmt *fmt)
 {
-    int precision;
-
-    precision = -1;
-    if (***str == '.')
+    fmt->precision = -1;
+    if (**str == '.')
     {
-        (**str)++;// .を飛ばす。
-        precision = 0;
-        if (('1' <= ***str) && (***str <= '9'))
-            precision = ft_atoi_d(&str);
-        else if (***str == '0')
+        (*str)++;// .を飛ばす。
+        fmt->precision = 0;
+        if (('1' <= **str) && (**str <= '9'))
+            fmt->precision = ft_atoi_d(str);
+        else if (**str == '0')
         {
-            (**str)++;
-            while (***str == '0')
-                (**str)++;
-            if (('1' <= ***str) && (***str <= '9'))
-                precision = ft_atoi_d(&str);
+            (*str)++;
+            while (**str == '0')
+                (*str)++;
+            if (('1' <= **str) && (**str <= '9'))
+                fmt->precision = ft_atoi_d(str);
         }
-        else if (***str == '*')// *の時
+        else if (**str == '*')// *の時
         {
-            precision = (int)va_arg(*ap, int);
-            if (precision < 0)
-                precision = -1;
-            (**str)++;
+            fmt->precision = (int)va_arg(*ap, int);
+            if (fmt->precision < 0)
+                fmt->precision = -1;
+            (*str)++;
         }
     }
-    return (precision);
 }
 
-int	ft_get_width(const char ***str, va_list *ap, int *flag)
+void    ft_get_width(const char **str, va_list *ap, t_fmt *fmt)
 {
-    int width;
-
-    width = -1;
-    if (('1' <= ***str) && (***str <= '9'))
-            width = ft_atoi_d(&str);
-    else if (***str == '0' || ***str == '-')
+    fmt->width = -1;
+    if (('1' <= **str) && (**str <= '9'))
+            fmt->width = ft_atoi_d(str);
+    else if (**str == '0' || **str == '-')
     {
-        while (***str == '0' || ***str == '-')
-            (**str)++;
+        while (**str == '0' || **str == '-')
+            (*str)++;
     }
-    else if (***str == '*')
+    else if (**str == '*')
     {
-        width = (int)va_arg(*ap, int);
-        if (width < 0)
+        fmt->width = (int)va_arg(*ap, int);
+        if (fmt->width < 0)
         {
-            *flag = -1;
-            width *= -1;
+            fmt->flag = -1;
+            fmt->width *= -1;
         }
-        (**str)++;
+        (*str)++;
     }
-    return (width);
 }
 
-int	ft_get_flag(const char ***str)
+void	ft_get_flag(const char **str, t_fmt *fmt)
 {
-    int flag;
-
-    flag = 1;
-    (**str)++;// %を飛ばす。
-    if (***str == '0')
+    fmt->flag = 1;
+    (*str)++;// %を飛ばす。
+    if (**str == '0')
     {
-        flag = 0;
-        (**str)++;
-        if (***str == '-')
+        fmt->flag = 0;
+        (*str)++;
+        if (**str == '-')
         {
-            (**str)++;
-            flag = -1;
+            (*str)++;
+            fmt->flag = -1;
         }
     }
-    else if (***str == '-')
+    else if (**str == '-')
     {
-        flag = -1;
-        (**str)++;
-        if (***str == '0')
-            (**str)++;
+        fmt->flag = -1;
+        (*str)++;
+        if (**str == '0')
+            (*str)++;
     }
-    else if (***str == '%')
+    else if (**str == '%')
     {
-        flag = 2;
-        (**str)++;
+        fmt->flag = 2;
+        (*str)++;
     }
-    return (flag);
 }
 
-int	ft_width_max_d(int width, int precision, int digit, int d)
+int	ft_width_max_d(t_fmt *fmt)
 {
     int width_max;
 
-    if (digit >= precision)
-        width_max = width - digit;
+    if ((fmt->digit_du) >= (fmt->precision))
+        width_max = (fmt->width) - (fmt->digit_du);
     else
-        width_max = width - precision;
-    if (d < 0)
+        width_max = (fmt->width) - (fmt->precision);
+    if ((fmt->d) < 0)
         width_max--;
     return (width_max);
 }
@@ -106,9 +97,9 @@ int	ft_isdigit(int c)
 	return (0);
 }
 
-int	ft_strlen(const char *s)
+size_t  ft_strlen(const char *s)
 {
-	int		i;
+	size_t		i;
 
 	i = 0;
 	while (s[i] != '\0')
@@ -121,18 +112,29 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-void	ft_putspace_d(int flag, int width, int precision, int digit, int d, int *count)
+void    ft_count_putchar(char c, int *count)
+{
+    ft_putchar(c);
+    (*count)++;
+}
+
+void	ft_putspace_d(t_fmt *fmt, int *count)
 {
     int margin;
-    if (precision == 0 && d == 0 && flag == -1)
-        margin = ft_width_max_d(width, precision, digit, d) + 1;
+    if ((fmt->precision) == 0 && (fmt->d) == 0 && (fmt->flag) == -1)
+        margin = ft_width_max_d(fmt) + 1;
     else
-        margin = ft_width_max_d(width, precision, digit, d);
+        margin = ft_width_max_d(fmt);
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
+}
+
+void    ft_putnbr_d_sub(t_fmt *fmt, int *count)
+{
+    int     n;
+
+    n = fmt->d;
+    ft_putnbr_d(n, count);
 }
 
 void	ft_putnbr_d(int n, int *count)
@@ -142,230 +144,200 @@ void	ft_putnbr_d(int n, int *count)
 	nbr = n;
 	if (n < 0)
 	{
-		ft_putchar('-');
-        (*count)++;
+		ft_count_putchar('-', count);
 		nbr = -n;
 	}
 	if (nbr >= 10)
 		ft_putnbr_d(nbr / 10, count);
-	ft_putchar(nbr % 10 + '0');
-    (*count)++;
+	ft_count_putchar(nbr % 10 + '0', count);
 }
 
-void	ft_putnbr_2d(int d, int precision, int digit, int *count)
+void	ft_putnbr_2d(t_fmt *fmt, int *count)
 {
     int             margin;
     unsigned int	nbr;
     int             sign;
 
     sign = 1;
-    if (d < 0)
+    if (fmt->d < 0)
     {
-        ft_putchar('-');
-        (*count)++;
+        ft_count_putchar('-', count);
         sign *= -1;
     }
-    margin = precision - digit;
+	nbr = sign * (fmt->d);
+    margin = fmt->precision - fmt->digit_du;
     while (margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
-	nbr = sign * d;
+        ft_count_putchar('0', count);
 	if (nbr >= 10)
 		ft_putnbr_d(nbr / 10, count);
-	ft_putchar(nbr % 10 + '0');
-    (*count)++;
+	ft_count_putchar(nbr % 10 + '0', count);
 }
 
-void	ft_putnbr_3d(int d, int precision, int digit, int *count)
+void	ft_putnbr_3d(t_fmt *fmt, int *count)
 {
     int             margin;
     unsigned int	nbr;
     int             sign;
 
-    if (precision == 0 && d == 0)
+    if ((fmt->precision) == 0 && (fmt->d) == 0)
         return;
     else
     {
         sign = 1;
-        if (d < 0)
+        if ((fmt->d) < 0)
         {
-            ft_putchar('-');
-            (*count)++;
+            ft_count_putchar('-', count);
             sign *= -1;
         }
-        margin = precision - digit;
+        margin = (fmt->precision) - (fmt->digit_du);
         while (margin-- > 0)
-        {
-            ft_putchar('0');
-            (*count)++;
-        }
-        nbr = sign * d;
+            ft_count_putchar('0', count);
+        nbr = sign * (fmt->d);
         if (nbr >= 10)
             ft_putnbr_d(nbr / 10, count);
-        ft_putchar(nbr % 10 + '0');
-        (*count)++;
+        ft_count_putchar(nbr % 10 + '0', count);
     }
 }
 
-void	ft_putnbr_4d(int d, int width, int digit, int *count)
+void	ft_putnbr_4d(t_fmt *fmt, int *count)
 {
     int             margin;
     unsigned int	nbr;
     int             sign;
 
     sign = 1;
-    if (d < 0)
+    if ((fmt->d) < 0)
     {
-        ft_putchar('-');
-        (*count)++;
+        ft_count_putchar('-', count);
         sign *= -1;
     }
     if (sign == -1)
-        margin = width - digit - 1;
+        margin = (fmt->width) - (fmt->digit_du) - 1;
     else
-        margin = width - digit;
+        margin = (fmt->width) - (fmt->digit_du);
     while (margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
-	nbr = sign * d;
+        ft_count_putchar('0', count);
+	nbr = sign * (fmt->d);
 	if (nbr >= 10)
 		ft_putnbr_d(nbr / 10, count);
-	ft_putchar(nbr % 10 + '0');
-    (*count)++;
+	ft_count_putchar(nbr % 10 + '0', count);
 }
 
-int ft_atoi_d(const char ****str)
+int ft_atoi_d(const char **str)
 {
 	long long		number;
 	int				i;
 
     number = 0;
     i = 0;
-    while (ft_isdigit(****str))
+    while (ft_isdigit(**str))
 	{
 		number = number * 10;
-        number += ****str - '0';
-		(***str)++;
+        number += **str - '0';
+		(*str)++;
     }
     return (number);
 }
 
-int	ft_get_type_d(const char ***str, va_list *ap, int *digit)
+void    ft_get_type_d(const char **str, va_list *ap, t_fmt *fmt)
 {
-    int d;
     int tmp;
 
-    d = (int)va_arg(*ap, int);
-    tmp = d;
-    if (d == 0)
-        (*digit)++;
+    fmt->d = (int)va_arg(*ap, int);
+    tmp = fmt->d;
+    if (fmt->d == 0)
+        (fmt->digit_du)++;
     while (tmp != 0)
     {
         tmp = tmp / 10;
-        (*digit)++;
-    } 
-    (**str)++;
-    return (d);
-}
-
-void	ft_putspace_nbr_d(int flag, int width, int precision, int digit, int d, int *count)
-{
-    ft_putspace_d(flag, width, precision, digit, d, count);
-    if (precision != 0 || d != 0)
-        ft_putnbr_3d(d, precision, digit, count);
-    else
-    {
-        ft_putchar(' ');
-        (*count)++;
+        (fmt->digit_du)++;
     }
+    (*str)++;
 }
 
-void	ft_putnbr_space_d(int flag, int width, int precision, int digit, int d, int *count)
+void	ft_putspace_nbr_d(t_fmt *fmt, int *count)
 {
-    ft_putnbr_3d(d, precision, digit, count);
-    ft_putspace_d(flag, width, precision, digit, d, count);
+    ft_putspace_d(fmt, count);
+    if ((fmt->precision) != 0 || (fmt->d) != 0)
+        ft_putnbr_3d(fmt, count);
+    else
+        ft_count_putchar(' ', count);
 }
 
-void	ft_output_d(int flag, int width, int precision, int digit, int d, int *count)
+void	ft_putnbr_space_d(t_fmt *fmt, int *count)
 {
-    if (width == -1 && precision == 0 && d == 0)
+    ft_putnbr_3d(fmt, count);
+    ft_putspace_d(fmt, count);
+}
+
+void	ft_output_d(t_fmt *fmt, int *count)
+{
+    if ((fmt->width) == -1 && (fmt->precision) == 0 && (fmt->d) == 0)
         return ;
-    else if (digit >= width && digit >= precision)
-        ft_putnbr_d(d, count);
-    else if (precision > digit && precision >= width)
-        ft_putnbr_2d(d, precision, digit, count);
-    else if (width > digit && width > precision)
+    else if ((fmt->digit_du) >= (fmt->width) && (fmt->digit_du) >= (fmt->precision))
+        ft_putnbr_d_sub(fmt, count);
+    else if ((fmt->precision) > (fmt->digit_du) && (fmt->precision) >= (fmt->width))
+        ft_putnbr_2d(fmt, count);
+    else if ((fmt->width) > (fmt->digit_du) && (fmt->width) > (fmt->precision))
     {
-        if (flag == 1)
-            ft_putspace_nbr_d(flag, width, precision, digit, d, count);
-        else if (flag == -1)
-            ft_putnbr_space_d(flag, width, precision, digit, d, count);
-        else if (flag == 0)
+        if ((fmt->flag) == 1)
+            ft_putspace_nbr_d(fmt, count);
+        else if ((fmt->flag) == -1)
+            ft_putnbr_space_d(fmt, count);
+        else if ((fmt->flag) == 0)
         {
-            if (precision != -1)
-                ft_putspace_nbr_d(flag, width, precision, digit, d, count);
+            if ((fmt->precision) != -1)
+                ft_putspace_nbr_d(fmt, count);
             else
-                ft_putnbr_4d(d, width, digit, count);
+                ft_putnbr_4d(fmt, count);
         }
     }
 }
 
 //---------------d----------------
 
-char	ft_get_type_c(const char ***str, va_list *ap)
+/* char	ft_get_type_c(const char **str, va_list *ap)
 {
     unsigned char c;
     
     c = (unsigned char)va_arg(*ap, int);
-    (**str)++;
+    (*str)++;
     return (c);
 }
 
 void	ft_putspace_c(int width, int *count)
 {
     while (((width--) - 1) > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_output_c(int flag, int width, unsigned char c, int *count)
 {
     if (-1 <= width && width <= 1)
-    {
-        ft_putchar((char)c);
-        (*count)++;
-    }
+        ft_count_putchar((char)c, count);
     else if (width > 1)
     {
         if (flag == 1)
         {
             ft_putspace_c(width, count);
-            ft_putchar((char)c);
-            (*count)++; 
+            ft_count_putchar((char)c, count);
         }
         else if (flag == -1)
         {
-            ft_putchar((char)c);
-            (*count)++;
+            ft_count_putchar((char)c, count);
             ft_putspace_c(width, count);
         }
     }
-}
+} */
 
 //---------------c----------------
 
-char	*ft_get_type_s(const char ***str, va_list *ap)
+/* char	*ft_get_type_s(const char **str, va_list *ap)
 {
     char *s;
     
     s = (char *)va_arg(*ap, char *);
-    (**str)++;
+    (*str)++;
     return (s);
 }
 
@@ -375,10 +347,7 @@ void	ft_putzero_s(int width, int len, int *count)
 
     margin = width - len;
     while(margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
 }
 
 void	ft_putzero_2s(int width, int precision, int len, int *count)
@@ -391,10 +360,7 @@ void	ft_putzero_2s(int width, int precision, int len, int *count)
     else if (len <= precision)
         margin = width - len;
     while(margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
 }
 
 void	ft_putspace_s(int width, int len, int *count)
@@ -403,10 +369,7 @@ void	ft_putspace_s(int width, int len, int *count)
 
     margin = width - len;
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putspace_2s(int width, int precision, int len, int *count)
@@ -419,10 +382,7 @@ void	ft_putspace_2s(int width, int precision, int len, int *count)
     else if (len <= precision)
         margin = width - len;
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putstr_s(char *s, int len, int *count)
@@ -489,16 +449,16 @@ void	ft_output_s(int flag, int width, int precision, char *s, int *count)
             ft_putstr_2s(s, precision, len, count);
         }
     }
-}
+} */
 
 //---------------s----------------
 
-void	*ft_get_type_p(const char ***str, va_list *ap)
+/* void	*ft_get_type_p(const char **str, va_list *ap)
 {
     void *p;
 
     p = (void *)va_arg(*ap, void *);
-    (**str)++;
+    (*str)++;
     return (p);    
 }
 
@@ -506,7 +466,7 @@ char	*ft_hex_convert_p(void *p, int *i)
 {
     unsigned long long  addr;
     char                hex[16] = "0123456789abcdef";
-    char                address[17] = {};
+    char                address[17];
     char                *p_address;
     int                 j;
 
@@ -542,10 +502,7 @@ void	ft_putaddr_2p(char *address, int precision, int digit, int *count)
     *count += 2;
     margin = precision - digit;
     while (margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
     while (digit - 1 >= 0)
     {
         write(1, &address[digit - 1], 1);
@@ -560,10 +517,7 @@ void	ft_putspace_p(int width, int digit, int *count)
 
     margin = width - digit - 2;
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putspace_2p(int width, int precision, int digit, int *count)
@@ -575,10 +529,7 @@ void	ft_putspace_2p(int width, int precision, int digit, int *count)
     else
         margin = width - precision - 2;    
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }    
+        ft_count_putchar(' ', count);
 }
 
 void	ft_output_p(int flag, int width, int precision, void *p, int *count)
@@ -619,19 +570,18 @@ void	ft_output_p(int flag, int width, int precision, void *p, int *count)
             ft_putspace_2p(width, precision, digit, count);
         }
     }
-}
+} */
 
 //---------------p----------------
 
-void	ft_putnbr_u(unsigned int n, int *count)
+/* void	ft_putnbr_u(unsigned int n, int *count)
 {
 	unsigned int	nbr;
 
 	nbr = n;
 	if (nbr >= 10)
 		ft_putnbr_u(nbr / 10, count);
-	ft_putchar(nbr % 10 + '0');
-    (*count)++;
+	ft_count_putchar(nbr % 10 + '0', count);
 }
 
 void	ft_putnbr_2u(unsigned int u, int precision, int digit, int *count)
@@ -642,14 +592,10 @@ void	ft_putnbr_2u(unsigned int u, int precision, int digit, int *count)
     nbr = u;
     margin = precision - digit;
     while (margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
 	if (nbr >= 10)
 		ft_putnbr_u(nbr / 10, count);
-	ft_putchar(nbr % 10 + '0');
-    (*count)++;
+	ft_count_putchar(nbr % 10 + '0', count);
 }
 
 void	ft_putnbr_3u(unsigned int u, int precision, int digit, int *count)
@@ -664,14 +610,10 @@ void	ft_putnbr_3u(unsigned int u, int precision, int digit, int *count)
         nbr = u;
         margin = precision - digit;
         while (margin-- > 0)
-        {
-            ft_putchar('0');
-            (*count)++;
-        }
+            ft_count_putchar('0', count);
         if (nbr >= 10)
             ft_putnbr_u(nbr / 10, count);
-        ft_putchar(nbr % 10 + '0');
-        (*count)++;    
+        ft_count_putchar(nbr % 10 + '0', count);
     }
 }
 
@@ -683,14 +625,10 @@ void	ft_putnbr_4u(unsigned int u, int width, int digit, int *count)
 	nbr = u;
     margin = width - digit;
     while (margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
 	if (nbr >= 10)
 		ft_putnbr_u(nbr / 10, count);
-	ft_putchar(nbr % 10 + '0');
-    (*count)++;
+	ft_count_putchar(nbr % 10 + '0', count);
 }
 
 int	ft_width_max_u(int width, int precision, int digit)
@@ -713,10 +651,7 @@ void	ft_putspace_u(int flag, int width, int precision, int digit, unsigned int u
     else
         margin = ft_width_max_u(width, precision, digit);
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putspace_nbr_u(int flag, int width, int precision, int digit, unsigned int u, int *count)
@@ -725,10 +660,7 @@ void	ft_putspace_nbr_u(int flag, int width, int precision, int digit, unsigned i
     if (precision != 0 || u != 0)
         ft_putnbr_3u(u, precision, digit, count);
     else
-    {
-        ft_putchar(' ');
-        (*count)++;        
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putnbr_space_u(int flag, int width, int precision, int digit, unsigned int u, int *count)
@@ -761,7 +693,7 @@ void	ft_output_u(int flag, int width, int precision, int digit, unsigned int u, 
     }
 }
 
-unsigned int	ft_get_type_u(const char ***str, va_list *ap, int *digit)
+unsigned int	ft_get_type_u(const char **str, va_list *ap, int *digit)
 {
     unsigned int u;
     unsigned int tmp;
@@ -775,18 +707,18 @@ unsigned int	ft_get_type_u(const char ***str, va_list *ap, int *digit)
         tmp = tmp / 10;
         (*digit)++;
     } 
-    (**str)++;
+    (*str)++;
     return (u);
-}
+} */
 
 //---------------u----------------
 
-unsigned int	ft_get_type_x(const char ***str, va_list *ap)
+/* unsigned int	ft_get_type_x(const char **str, va_list *ap)
 {
     unsigned int x;
 
     x = (unsigned int)va_arg(*ap, unsigned int);
-    (**str)++;
+    (*str)++;
     return (x);
 }
 
@@ -828,10 +760,7 @@ void	ft_putnbr_2x(char **hex_cvt, int precision, int digit, int *count)
 
     margin = precision - digit;
     while (margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
     ft_putnbr_x(hex_cvt, digit, count);
 }
 
@@ -852,19 +781,13 @@ void	ft_putspace_x(int width, int precision, int digit, int *count)
 
     margin = ft_width_max_x(width, precision, digit);
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putspace_2x(int width, int *count)
 {
     while (width-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;        
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putspace_nbr_x(int width, int precision, int digit, char **hex_cvt, unsigned int x, int *count)
@@ -938,11 +861,8 @@ void	ft_hex_convert_X(unsigned int x, int *i, char **hex_cvt)
         j = y % 16;
         y = y / 16;
         (*hex_cvt)[*i] = hex[j];
-        //printf("--%d,%c--\n", *i, hex[j]);
         (*i)++;
     }
-    //(*i)--;
-    //printf("===%s===\n", *hex_cvt);
 }
 
 void	ft_output_X(int flag, int width, int precision, unsigned int x, int *count)
@@ -973,62 +893,53 @@ void	ft_output_X(int flag, int width, int precision, unsigned int x, int *count)
                 ft_putspace_nbr_x(width, precision, digit, &p_hex_cvt, x, count);
             else
                 ft_putnbr_2x(&p_hex_cvt, width, digit, count);
-        }
+        } 
     }
-}
+} */
 
 //---------------xX----------------
 
-void    ft_output_pct(const char ***str, int flag, int width, int *count)
+void    ft_output_pct(const char **str, t_fmt *fmt, int *count)
 {
-    if (flag == 1)
+    if (fmt->flag == 1)
     {
-        while (width - 1 > 0)
+        while (fmt->width - 1 > 0)
         {
-            ft_putchar(' ');
-            (*count)++;
-            width--;
+            ft_count_putchar(' ', count);
+            fmt->width--;
         }
-        ft_putchar('%');
-        (*count)++;
+        ft_count_putchar('%', count);
     }
-    else if (flag == -1)
+    else if (fmt->flag == -1)
     {
-        ft_putchar('%');
-        (*count)++;
-        while (width - 1 > 0)
+        ft_count_putchar('%', count);
+        while (fmt->width - 1 > 0)
         {
-            ft_putchar(' ');
-            (*count)++;
-            width--;
+            ft_count_putchar(' ', count);
+            fmt->width--;
         }
     }
-    else if (flag == 0)
+    else if (fmt->flag == 0)
     {
-        while (width - 1 > 0)
+        while (fmt->width - 1 > 0)
         {
-            ft_putchar('0');
-            (*count)++;
-            width--;
+            ft_count_putchar('0', count);
+            fmt->width--;
         }
-        ft_putchar('%');
-        (*count)++;
+        ft_count_putchar('%', count);
     }
-    (**str)++;
+    (*str)++;
 }
 
 //---------------%%----------------
 
-void	ft_putzero_null(int width, int *count)
+/* void	ft_putzero_null(int width, int *count)
 {
     int margin;
 
     margin = width - 6;
     while(margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
 }
 
 void	ft_putzero_2null(int width, int precision, int *count)
@@ -1041,10 +952,7 @@ void	ft_putzero_2null(int width, int precision, int *count)
     else if (6 <= precision)
         margin = width - 6;
     while(margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
 }
 
 void	ft_putspace_null(int width, int *count)
@@ -1053,10 +961,7 @@ void	ft_putspace_null(int width, int *count)
 
     margin = width - 6;
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putspace_2null(int width, int precision, int *count)
@@ -1069,10 +974,7 @@ void	ft_putspace_2null(int width, int precision, int *count)
     else if (6 <= precision)
         margin = width - 6;
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putnull(int len, int *count)
@@ -1139,20 +1041,17 @@ void    ft_output_null(int flag, int width, int precision, int *count)
             ft_putnull_2(precision, count);            
         }
     }
-}
+} */
 
 //---------------null_s----------------
 
-void	ft_putzero_null_p(int width, int *count)
+/* void	ft_putzero_null_p(int width, int *count)
 {
     int margin;
 
     margin = width - 3;
     while(margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }
+        ft_count_putchar('0', count);
 }
 
 void	ft_putspace_null_p(int width, int *count)
@@ -1161,10 +1060,7 @@ void	ft_putspace_null_p(int width, int *count)
 
     margin = width - 3;
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putspace_null_2p(int width, int precision, int *count)
@@ -1173,10 +1069,7 @@ void	ft_putspace_null_2p(int width, int precision, int *count)
 
     margin = width - 2 - precision;
     while(margin-- > 0)
-    {
-        ft_putchar(' ');
-        (*count)++;
-    }
+        ft_count_putchar(' ', count);
 }
 
 void	ft_putnull_p(int len, int *count)
@@ -1196,10 +1089,7 @@ void	ft_putnull_2p(int len, int precision, int *count)
     *count += len;
     margin = precision;
     while(margin-- > 0)
-    {
-        ft_putchar('0');
-        (*count)++;
-    }    
+        ft_count_putchar('0', count);
 }
 
 void	ft_output_null_p(int flag, int width, int precision, int *count)
@@ -1240,57 +1130,50 @@ void	ft_output_null_p(int flag, int width, int precision, int *count)
             ft_putspace_null_2p(width, precision, count);
         }
     }
-}
+} */
 
 //---------------null_p----------------
 
-void	ft_input(const char **str, va_list *ap, int *count)
+void    ft_init_fmt(t_fmt *fmt)
 {
-    int             flag;
-    int             width;
-    int             precision;
-    int             d;
-    int             digit_du;
-    unsigned int    u;
-    unsigned char   c;
-    char            *s;
-    void            *p;
-    unsigned int    x;
+    fmt->flag = 1;
+    fmt->width = -1;
+    fmt->precision = -1;
+    fmt->digit_du = 0;
+}
 
-    precision = -1;
-    digit_du = 0;
-    flag = ft_get_flag(&str);//フラグ
-    if (flag == 2)
-    {
-        ft_putchar('%');
-        (*count)++;
-    }
+void	ft_input(const char **str, va_list *ap, int *count, t_fmt *fmt)
+{
+    ft_init_fmt(fmt);
+    ft_get_flag(str, fmt);//フラグ
+    if ((fmt->flag) == 2)
+        ft_count_putchar('%', count);
     else
     {
-        width = ft_get_width(&str, ap, &flag);
+        ft_get_width(str, ap, fmt);
         if (**str == '%')
-            ft_output_pct(&str, flag, width, count);
+            ft_output_pct(str, fmt, count);
         else
         {
-            precision = ft_get_precision(&str, ap);
+            ft_get_precision(str, ap, fmt);
             if (**str == 'd' || **str == 'i')
             {
-                d = ft_get_type_d(&str, ap, &digit_du);
-                ft_output_d(flag, width, precision, digit_du, d, count);
+                ft_get_type_d(str, ap, fmt);
+                ft_output_d(fmt, count);
             }
-            else if (**str == 'u')
+            /* else if (**str == 'u')
             {
-                u = ft_get_type_u(&str, ap, &digit_du);
+                u = ft_get_type_u(str, ap, &digit_du);
                 ft_output_u(flag, width, precision, digit_du, u, count);
             }
             else if (**str == 'c')
             {
-                c = ft_get_type_c(&str, ap);
+                c = ft_get_type_c(str, ap);
                 ft_output_c(flag, width, c, count);
             }
             else if (**str == 's')
             {
-                s = ft_get_type_s(&str, ap);
+                s = ft_get_type_s(str, ap);
                 if (s == NULL)
                     ft_output_null(flag, width, precision, count);
                 else
@@ -1298,7 +1181,7 @@ void	ft_input(const char **str, va_list *ap, int *count)
             }
             else if (**str == 'p')
             {
-                p = ft_get_type_p(&str, ap);
+                p = ft_get_type_p(str, ap);
                 if (p == NULL)
                     ft_output_null_p(flag, width, precision, count);
                 else
@@ -1306,14 +1189,14 @@ void	ft_input(const char **str, va_list *ap, int *count)
             }
             else if (**str == 'x')
             {
-                x = ft_get_type_x(&str, ap);
+                x = ft_get_type_x(str, ap);
                 ft_output_x(flag, width, precision, x, count);
             }
             else if (**str == 'X')
             {
-                x = ft_get_type_x(&str, ap);
+                x = ft_get_type_x(str, ap);
                 ft_output_X(flag, width, precision, x, count);
-            }
+            } */
         }
         //printf("flag:%d, width:%d, precision:%d\n", flag, width, precision);
     }
@@ -1331,6 +1214,7 @@ int ft_printf(const char *str, ...)
 {
     va_list     ap;
     const char  *start;
+    t_fmt       fmt;
     int         count;
 
     count = 0;    
@@ -1343,7 +1227,7 @@ int ft_printf(const char *str, ...)
         if (*str != '%')
             ft_printf_str(&start, &str, &count);
         else
-            ft_input(&str, &ap, &count);
+            ft_input(&str, &ap, &count, &fmt);
     }
     va_end(ap);
     return (count);
