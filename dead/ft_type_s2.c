@@ -1,71 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_type_s2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/03 13:39:56 by kmorimot          #+#    #+#             */
+/*   Updated: 2020/11/03 13:41:43 by kmorimot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ft_printf.h"
 
-
 void	ft_putzero_s(t_fmt *fmt, int len, int *count)
 {
-    int margin;
+	int		margin;
 
-    margin = (fmt->width) - len;
-    while(margin-- > 0)
-        ft_count_putchar('0', count);
+	margin = (fmt->width) - len;
+	while (margin-- > 0)
+		ft_count_putchar('0', count);
 }
 
-void    ft_puts_by_precision(t_fmt *fmt, int len, int *count)
+void	ft_puts_by_precision(t_fmt *fmt, int len, int *count)
 {
-    if ((fmt->flag) == 1)
-    {
-        ft_putspace_2s(fmt, len, count);
-        ft_putstr_2s(fmt, len, count);
-    }
-    else if ((fmt->flag) == -1)
-    {
-        ft_putstr_2s(fmt, len, count);
-        ft_putspace_2s(fmt, len, count);
-    }
-    else if ((fmt->flag) == 0)
-    {
-        ft_putzero_2s(fmt, len, count);
-        ft_putstr_2s(fmt, len, count);
-    }
+	if ((fmt->flag) == 1)
+	{
+		ft_putspace_2s(fmt, len, count);
+		ft_putstr_2s(fmt, len, count);
+	}
+	else if ((fmt->flag) == -1)
+	{
+		ft_putstr_2s(fmt, len, count);
+		ft_putspace_2s(fmt, len, count);
+	}
+	else if ((fmt->flag) == 0)
+	{
+		ft_putzero_2s(fmt, len, count);
+		ft_putstr_2s(fmt, len, count);
+	}
 }
 
 void	ft_putspace_2s(t_fmt *fmt, int len, int *count)
 {
-    int margin;
+	int		margin;
 
-    margin = 0;
-    if (len > (fmt->precision))
-        margin = (fmt->width) - (fmt->precision);
-    else if (len <= (fmt->precision))
-        margin = (fmt->width) - len;
-    while(margin-- > 0)
-        ft_count_putchar(' ', count);
+	margin = 0;
+	if (len > (fmt->precision))
+		margin = (fmt->width) - (fmt->precision);
+	else if (len <= (fmt->precision))
+		margin = (fmt->width) - len;
+	while (margin-- > 0)
+		ft_count_putchar(' ', count);
 }
 
 void	ft_putstr_2s(t_fmt *fmt, int len, int *count)
 {
-    int strlen;
-    char *s1;
+	int		strlen;
+	char	*s1;
 
-    s1 = fmt->s;
-    if ((fmt->precision) >= len)
-        strlen = len;
-    else
-        strlen = fmt->precision;
-    write(1, s1, strlen);
-    *count += strlen;
+	s1 = fmt->s;
+	if ((fmt->precision) >= len)
+		strlen = len;
+	else
+		strlen = fmt->precision;
+	write(1, s1, strlen);
+	*count += strlen;
 }
 
 void	ft_putzero_2s(t_fmt *fmt, int len, int *count)
 {
-    int margin;
+	int		margin;
 
-    margin = 0;
-    if (len > (fmt->precision))
-        margin = (fmt->width) - (fmt->precision);
-    else if (len <= (fmt->precision))
-        margin = (fmt->width) - len;
-    while(margin-- > 0)
-        ft_count_putchar('0', count);
+	margin = 0;
+	if (len > (fmt->precision))
+		margin = (fmt->width) - (fmt->precision);
+	else if (len <= (fmt->precision))
+		margin = (fmt->width) - len;
+	while (margin-- > 0)
+		ft_count_putchar('0', count);
 }
