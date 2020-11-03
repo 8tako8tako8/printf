@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 03:57:17 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 13:47:56 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 18:05:27 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_putspace_2null_s(t_fmt *fmt, int *count)
 
 void	ft_putnull_2_s(t_fmt *fmt, int *count)
 {
-	char	n[6];
+	char	*n;
 	int		len;
 
 	n = "(null)";

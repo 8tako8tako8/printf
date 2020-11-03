@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:17:51 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 04:23:24 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 18:04:09 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_putnull_not_by_precision_p(t_fmt *fmt, int *count)
 
 void	ft_putnull_p(int len, int *count)
 {
-	char n[3];
+	char	*n;
 
 	n = "0x0";
 	write(1, n, len);
@@ -55,7 +55,7 @@ void	ft_putnull_p(int len, int *count)
 
 void	ft_putspace_null_p(t_fmt *fmt, int *count)
 {
-	int margin;
+	int		margin;
 
 	margin = (fmt->width) - 3;
 	while (margin-- > 0)
@@ -64,7 +64,7 @@ void	ft_putspace_null_p(t_fmt *fmt, int *count)
 
 void	ft_putzero_null_p(t_fmt *fmt, int *count)
 {
-	int margin;
+	int		margin;
 
 	margin = (fmt->width) - 3;
 	while (margin-- > 0)

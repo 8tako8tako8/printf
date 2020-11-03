@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:25:55 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 13:51:21 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 18:04:43 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void		ft_putspace_null_2p(t_fmt *fmt, int *count)
 
 void		ft_putnull_2p(int len, t_fmt *fmt, int *count)
 {
-	char	n[2];
+	char	*n;
 	int		margin;
 
 	n = "0x";

@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:14:53 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 04:17:15 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:56:06 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ void	ft_get_type_and_output_x(const char **str, va_list *ap,
 	else if (**str == 'X')
 	{
 		ft_get_type_x(str, ap, fmt);
-		ft_output_X(fmt, count);
+		ft_output_largex(fmt, count);
 	}
 }

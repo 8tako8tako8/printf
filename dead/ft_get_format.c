@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:02:48 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 04:09:33 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:55:08 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_get_precision(const char **str, va_list *ap, t_fmt *fmt)
 			while (**str == '0')
 				(*str)++;
 			if (('1' <= **str) && (**str <= '9'))
-				fmt->precision = ft_atoi_d(str);
+				fmt->precision = ft_atoi_ex(str);
 		}
 		else if (**str == '*')
 		{

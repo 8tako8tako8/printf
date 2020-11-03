@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:35:45 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 13:47:13 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 18:05:49 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_putnull_not_by_precision_s(t_fmt *fmt, int *count)
 
 void	ft_putnull_s(int len, int *count)
 {
-	char	n[6];
+	char	*n;
 
 	n = "(null)";
 	write(1, n, len);

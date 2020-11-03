@@ -6,7 +6,7 @@
 #    By: kmorimot <kmorimot@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/12 13:07:44 by kmorimot          #+#    #+#              #
-#    Updated: 2020/11/03 16:26:52 by kmorimot         ###   ########.fr        #
+#    Updated: 2020/11/03 19:51:09 by kmorimot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,9 +56,11 @@ $(NAME): $(OBJS)
 
 clean:
 	rm -f $(OBJS)
+	$(MAKE) -C ./libft clean
 
 fclean: clean
 	rm -f $(NAME)
+	$(MAKE) -C ./libft fclean
 
 re: fclean all
 

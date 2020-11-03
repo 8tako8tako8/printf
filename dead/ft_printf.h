@@ -1,23 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/03 19:39:44 by kmorimot          #+#    #+#             */
+/*   Updated: 2020/11/03 19:46:00 by kmorimot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
 # include <stdarg.h>
 # include <unistd.h>
-# include <stdio.h>
 
 typedef struct		s_fmt
 {
-	int		flag;
-	int		width;
-	int		precision;
-	int		d;
+	int				flag;
+	int				width;
+	int				precision;
+	int				d;
 	unsigned int	u;
 	unsigned char	c;
-	char		*s;
-	void		*p;
+	char			*s;
+	void			*p;
 	unsigned int	x;
-	int		digit;
-}			t_fmt;
+	int				digit;
+}					t_fmt;
 
 void	ft_get_precision(const char **str, va_list *ap, t_fmt *fmt);
 void	ft_get_width(const char **str, va_list *ap, t_fmt *fmt);
@@ -51,16 +62,16 @@ void	ft_putnull_by_precision_s(t_fmt *fmt, int *count);
 void	ft_putspace_2null_s(t_fmt *fmt, int *count);
 void	ft_putnull_2_s(t_fmt *fmt, int *count);
 void	ft_putzero_2null_s(t_fmt *fmt, int *count);
-int	ft_printf(const char *str, ...);
+int			ft_printf(const char *str, ...);
 void	ft_printf_str(const char **start, const char **str, int *count);
 void	ft_input(const char **str, va_list *ap, int *count, t_fmt *fmt);
 void	ft_init_fmt(t_fmt *fmt);
 void	ft_output_pct(const char **str, t_fmt *fmt, int *count);
 void	ft_count_putchar(char c, int *count);
-int	ft_atoi_ex(const char **str);
+int			ft_atoi_ex(const char **str);
 void	ft_get_type_x(const char **str, va_list *ap, t_fmt *fmt);
 void	ft_output_largex(t_fmt *fmt, int *count);
-void	ft_hex_convert_largex(t_fmt *fmt, char **hex_cvt);
+void	ft_hex_convert_largex(t_fmt *fmt, char *hex_cvt);
 void	ft_get_type_c(const char **str, va_list *ap, t_fmt *fmt);
 void	ft_output_c(t_fmt *fmt, int *count);
 void	ft_putspace_c(t_fmt *fmt, int *count);
@@ -71,7 +82,7 @@ void	ft_putnbr_d(int n, int *count);
 void	ft_putnbr_2d(t_fmt *fmt, int *count);
 void	ft_putspace_nbr_d(t_fmt *fmt, int *count);
 void	ft_putspace_d(t_fmt *fmt, int *count);
-int	ft_width_max_d(t_fmt *fmt);
+int			ft_width_max_d(t_fmt *fmt);
 void	ft_putnbr_space_d(t_fmt *fmt, int *count);
 void	ft_putnbr_3d(t_fmt *fmt, int *count);
 void	ft_putnbr_4d(t_fmt *fmt, int *count);
@@ -100,19 +111,19 @@ void	ft_putnbr_u_sub(t_fmt *fmt, int *count);
 void	ft_putnbr_u(unsigned int n, int *count);
 void	ft_putnbr_2u(t_fmt *fmt, int *count);
 void	ft_putspace_nbr_u(t_fmt *fmt, int *count);
-int	ft_width_max_u(t_fmt *fmt);
+int			ft_width_max_u(t_fmt *fmt);
 void	ft_putnbr_space_u(t_fmt *fmt, int *count);
 void	ft_putnbr_3u(t_fmt *fmt, int *count);
 void	ft_putnbr_4u(t_fmt *fmt, int *count);
 void	ft_output_x(t_fmt *fmt, int *count);
-void	ft_hex_convert_x(t_fmt *fmt, char **hex_cvt);
-void	ft_putnbr_x(char **hex_cvt, t_fmt *fmt, int *count);
-void	ft_putnbr_2x(char **hex_cvt, t_fmt *fmt, int *count);
-void	ft_putspace_nbr_x(t_fmt *fmt, char **hex_cvt, int *count);
+void	ft_hex_convert_x(t_fmt *fmt, char *hex_cvt);
+void	ft_putnbr_x(char *hex_cvt, t_fmt *fmt, int *count);
+void	ft_putnbr_2x(char *hex_cvt, t_fmt *fmt, int *count);
+void	ft_putspace_nbr_x(t_fmt *fmt, char *hex_cvt, int *count);
 void	ft_putspace_x(t_fmt *fmt, int *count);
-int	ft_width_max_x(t_fmt *fmt);
+int			ft_width_max_x(t_fmt *fmt);
 void	ft_putspace_2x(t_fmt *fmt, int *count);
-void	ft_putnbr_space_x(t_fmt *fmt, char **hex_cvt, int *count);
-void	ft_putnbr_3x(char **hex_cvt, t_fmt *fmt, int *count);
+void	ft_putnbr_space_x(t_fmt *fmt, char *hex_cvt, int *count);
+void	ft_putnbr_3x(char *hex_cvt, t_fmt *fmt, int *count);
 
 #endif

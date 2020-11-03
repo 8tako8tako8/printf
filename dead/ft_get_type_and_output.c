@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:10:46 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 04:14:34 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:55:39 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_get_type_and_output_s(const char **str, va_list *ap,
 {
 	ft_get_type_s(str, ap, fmt);
 	if ((fmt->s) == NULL)
-		ft_output_null(fmt, count);
+		ft_output_null_s(fmt, count);
 	else
 		ft_output_s(fmt, count);
 }

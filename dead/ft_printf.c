@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 01:10:08 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 01:43:30 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:51:55 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	ft_input(const char **str, va_list *ap, int *count, t_fmt *fmt)
 			else if (**str == 'p')
 				ft_get_type_and_output_p(str, ap, count, fmt);
 			else if (**str == 'x' || **str == 'X')
-				ft_get_type_and_output_xX(str, ap, count, fmt);
+				ft_get_type_and_output_x(str, ap, count, fmt);
 		}
 	}
 }

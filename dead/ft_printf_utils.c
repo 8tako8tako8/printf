@@ -6,15 +6,16 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 03:54:03 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 03:56:40 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:54:18 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include "libft/libft.h"
 
 void	ft_count_putchar(char c, int *count)
 {
-	ft_putchar(c);
+	ft_putchar_fd(c, 1);
 	(*count)++;
 }
 

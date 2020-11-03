@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 13:35:04 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 13:36:37 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 19:13:13 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_putspace_2x(t_fmt *fmt, int *count)
 		ft_count_putchar(' ', count);
 }
 
-void	ft_putnbr_space_x(t_fmt *fmt, char **hex_cvt, int *count)
+void	ft_putnbr_space_x(t_fmt *fmt, char *hex_cvt, int *count)
 {
 	if ((fmt->precision) == 0 && (fmt->x) == 0)
 		ft_putspace_2x(fmt, count);
@@ -49,7 +49,7 @@ void	ft_putnbr_space_x(t_fmt *fmt, char **hex_cvt, int *count)
 	}
 }
 
-void	ft_putnbr_3x(char **hex_cvt, t_fmt *fmt, int *count)
+void	ft_putnbr_3x(char *hex_cvt, t_fmt *fmt, int *count)
 {
 	int		margin;
 
