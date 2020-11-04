@@ -6,11 +6,12 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 13:38:05 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 13:39:34 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 20:59:09 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include "libft/libft.h"
 
 void	ft_get_type_s(const char **str, va_list *ap, t_fmt *fmt)
 {

@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:41:33 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 19:09:16 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 20:57:55 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_get_type_x(const char **str, va_list *ap, t_fmt *fmt)
 	(*str)++;
 }
 
-void	ft_output_x(t_fmt *fmt, int *count)
+void	ft_output_largex(t_fmt *fmt, int *count)
 {
 	char	hex_cvt[17];
 

@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 04:02:48 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 19:55:08 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/04 14:21:17 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,22 @@ void	ft_get_flag(const char **str, t_fmt *fmt)
 			(*str)++;
 			fmt->flag = -1;
 		}
+		while (**str == '0' || **str == '-')
+			(*str)++;
 	}
 	else if (**str == '-')
 	{
 		fmt->flag = -1;
 		(*str)++;
-		if (**str == '0')
+		while (**str == '0' || **str == '-')
 			(*str)++;
 	}
 	else if (**str == '%')
-	{
-		fmt->flag = 2;
-		(*str)++;
-	}
+		ft_get_flag_pctpct(str, fmt);
+}
+
+void	ft_get_flag_pctpct(const char **str, t_fmt *fmt)
+{
+	fmt->flag = 2;
+	(*str)++;
 }

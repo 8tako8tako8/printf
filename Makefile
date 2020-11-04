@@ -3,41 +3,49 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tauehara <tauehara@student.42tokyo.jp>     +#+  +:+       +#+         #
+#    By: kmorimot <kmorimot@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/10/12 23:42:23 by tauehara          #+#    #+#              #
-#    Updated: 2020/10/30 13:58:21 by tauehara         ###   ########.fr        #
+#    Created: 2020/10/12 13:07:44 by kmorimot          #+#    #+#              #
+#    Updated: 2020/11/03 19:51:09 by kmorimot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC		:=	gcc
-CFLAGS	:=	-Wall -Wextra -Werror
-SRC_DIR	:=	./
-SRCS	:=	ft_printf.c  \
-			check_format.c \
-            output_format.c \
-            parse_format.c \
-            parse_format2.c \
-			create_str_by_precision.c \
-			create_str_by_precision2.c \
-			padding_zero_strnum.c \
-            print_format.c \
-			print_str_by_field_width.c \
-			print_str_by_field_width2.c \
-            fmt_flgs_utils.c \
-			ft_itoa_hex.c \
-			ft_uitoa.c \
-			ft_ptoa.c \
-			ft_putstr.c \
-			mem_free.c
-B_SRCS	:=	$(SRCS)
-OBJS	:=	$(SRCS:.c=.o)
-B_OBJS	:=	$(OBJS) $(B_SRCS:.c=.o)
+NAME := libftprintf.a
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror
+SRC_DIR := ./
+SRCS := ft_printf.c \
+		ft_printf_utils.c \
+		ft_get_format.c \
+		ft_get_type_and_output.c \
+		ft_get_type_and_output2.c \
+		ft_output_null_p.c \
+		ft_output_null_p2.c \
+		ft_output_null_s.c \
+		ft_output_null_s2.c \
+		ft_type_largex.c \
+		ft_type_c.c \
+		ft_type_d.c \
+		ft_type_d2.c \
+		ft_type_d3.c \
+		ft_type_p.c \
+		ft_type_p2.c \
+		ft_type_s.c \
+		ft_type_s2.c \
+		ft_type_u.c \
+		ft_type_u2.c \
+		ft_type_u3.c \
+		ft_type_x1.c \
+		ft_type_x2.c 
+OBJS := $(SRCS:.c=.o)
 INCLUDE := -I.ft_printf.h \
-			-I./libft/libft.h
-NAME	:=	libftprintf.a
-AR		:=	ar
-ARFLAGS	:=	rcs
+	   -I./libft/libft.h \
+
+AR := ar
+ARFLAGS := rcs
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
 
 all: $(NAME)
 
@@ -46,18 +54,14 @@ $(NAME): $(OBJS)
 	cp libft/libft.a $(NAME)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJS)
 
-bonus: $(B_OBJS) 
-	$(AR) $(ARFLAGS) $(NAME) $(B_OBJS)
-
-.c.o:
-	$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
-
 clean:
-	$(RM) $(OBJS) $(B_OBJS)
+	rm -f $(OBJS)
+	$(MAKE) -C ./libft clean
 
 fclean: clean
-	$(RM) $(NAME)
+	rm -f $(NAME)
+	$(MAKE) -C ./libft fclean
 
 re: fclean all
 
-.PHONY:	all clean fclean re bonus
+.PHONY: all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 01:10:08 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 19:51:55 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 21:56:50 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	ft_output_pct(const char **str, t_fmt *fmt, int *count)
 	}
 	else if ((fmt->flag) == 0)
 	{
-		while ((fmt->width) - 1 > 0)
+		while ((fmt->width)-- - 1 > 0)
 			ft_count_putchar('0', count);
 		ft_count_putchar('%', count);
 	}

@@ -6,7 +6,7 @@
 /*   By: kmorimot <kmorimot@student.42tokyo.>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 13:32:31 by kmorimot          #+#    #+#             */
-/*   Updated: 2020/11/03 19:12:33 by kmorimot         ###   ########.fr       */
+/*   Updated: 2020/11/03 21:38:37 by kmorimot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	ft_output_x(t_fmt *fmt, int *count)
 {
 	char	hex_cvt[17];
 
+	ft_hex_convert_x(fmt, hex_cvt);
 	if ((fmt->width) == -1 && (fmt->precision) == 0 && (fmt->x) == 0)
 		return ;
 	else if ((fmt->digit) >= (fmt->width) && (fmt->digit) >= (fmt->precision))
